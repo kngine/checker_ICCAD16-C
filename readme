@@ -1,0 +1,81 @@
+==========================================================================
+Checker_ICCAD16-C version 1.0
+
+This program is for evaluation for Problem C of ICCAD-2016 CAD Contest
+http://cad-contest-2016.el.cycu.edu.tw/problem_C/default.html
+The program mainly checks whether or not the clustering result is valid
+
+For any question, please contact
+Jian Kuang
+Department of Computer Science and Engineering,
+the Chinese University of Hong Kong.
+jkuang@cse.cuhk.edu.hk
+mr.kngine@gmail.com
+=========================================================================
+
+
+
+=========================================================================
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+    OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+===========================================================================
+
+
+
+
+=========================================================================
+File list:
+parse: the executable
+header.h: header file with data structures
+parse.cpp: major source file
+lib.a: library file
+makefile: make file used to compile
+parse.o: binary file compiled from parse.cpp
+=========================================================================
+
+
+You must have boost library to compile the files
+http://www.boost.org/users/download/
+However, you can run the executable without boost
+
+Tested with gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.3), Intel(R) Xeon(R) CPU E3-1220 V2 @ 3.10GHz
+
+To start:
+simply type "make -B"
+
+Usage: ./parse <input_gds_file> <ACC/ECC> <threshold> <clip_width> <clip_height> <overlay_gds_file> [representative_gds_file]
+"representative_gds_file" is optional
+If "representative_gds_file" is not provide, the first clip encountered in each cluster will be used as the representative
+
+[Examples for Commands]
+./parse ../benchmark/testcase1.gds ECC 4 200 200 ../benchmark/overlay_testcase1e4.gds
+./parse ../benchmark/testcase3.gds ACC 0.95 250 250 ../benchmark/overlay_testcase3ap95.gds
+./parse ../benchmark/testcase3.gds ACC 0.95 250 250 ../benchmark/overlay_testcase3ap95.gds rep.gds
+
+[Sample Output for overlay_testcase1ap95.gds]
+parsing cluster file...
+extrating clips...
+=printing clusters:=
+cluster 1: 1 3 7 8 9 13
+cluster 2: 0 4 5 6 11 15
+cluster 3: 2 10 12
+cluster 4: 14
+Total clip #: 16
+=checking cluster similarity...=
+- now checking cluster 1  with representative clip 13 -
+- now checking cluster 2  with representative clip 15 -
+- now checking cluster 3  with representative clip 12 -
+- now checking cluster 4  with representative clip 14 -
+=clusters checking finished=
+Solution is valid.
+----------Number of cluster: 4------------
+
