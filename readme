@@ -47,14 +47,16 @@ You must have boost library to compile the files
 http://www.boost.org/users/download/
 However, you can run the executable without boost
 
-Tested with gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.3), Intel(R) Xeon(R) CPU E3-1220 V2 @ 3.10GHz
+Tested with gcc version 4.8.4, Ubuntu 4.8.4-2ubuntu1~14.04.3, Intel(R) Xeon(R) CPU E3-1220 V2 @ 3.10GHz
 
-To start:
+To compile:
 simply type "make -B"
 
 Usage: ./parse <input_gds_file> <ACC/ECC> <threshold> <clip_width> <clip_height> <overlay_gds_file> [representative_gds_file]
 "representative_gds_file" is optional
 If "representative_gds_file" is not provide, the first clip encountered in each cluster will be used as the representative
+
+Note: this program is general enough to support the case of abutting/overlapping markers/clips.
 
 [Examples for Commands]
 ./parse ../benchmark/testcase1.gds ECC 4 200 200 ../benchmark/overlay_testcase1e4.gds

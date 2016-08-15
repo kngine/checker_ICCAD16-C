@@ -248,7 +248,9 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    edmonds_maximum_cardinality_matching(g, &mate[0]);//ideally, the maximum matching is a perfect graph matching
+    edmonds_maximum_cardinality_matching(g, &mate[0]);
+    //ideally, the maximum matching is a perfect graph matching
+    //now vertex i is matched with mate[i]
 
     if(matching_size(g, &mate[0])!=nMarker)
     {
@@ -259,9 +261,9 @@ int main(int argc, char **argv)
     graph_traits<my_graph>::vertex_iterator vi, vi_end;
     for(tie(vi,vi_end) = vertices(g); *vi < nMarker; ++vi)
     {
-        //(*vi)-th clip is mapped to (mate[*vi]-nMarker)-th clip
+        //(*vi)-th marker's clip layout is determined by (mate[*vi]-nMarker)-th clip
         database.clips[*vi].setBoder(allClipPoly[mate[*vi]-nMarker]);
-        //extract the real layout (features) for the clip
+        //extract the real layout (features) for the clip, which will be used to calculate similarity
         database.clips[*vi].cutClip();
         if(database.clips[*vi].polygons.size()==0)
         {
@@ -276,16 +278,17 @@ int main(int argc, char **argv)
     sort(clusterID.begin(), clusterID.end(), cmpCluster);//sort by cluster size
     for(unsigned i=0; i<clusterID.size(); i++)
     {
-        //according to matching result, map clip-IDs to marker-IDs
         for(unsigned j=0; j<clusterID[i].size(); j++)
         {
             clusterID[i][j] = mate[nMarker + clusterID[i][j]];
+            //according to the matching result, map clip-IDs to marker-IDs
+            //now clusterID[i][j] stores the marker-IDs in layoutLib[1]
         }
         repID[i] = mate[nMarker + repID[i]];
         sort(clusterID[i].begin(), clusterID[i].end());
     }
 
-    printClusters(clusterID);
+    printClusters(clusterID); //to save time, comment out this print function
 
     checkClusters(clusterID, repID);//check similarity for each cluster
 
