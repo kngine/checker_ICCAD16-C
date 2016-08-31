@@ -78,7 +78,48 @@ void checkClusters(vector<vector<int> > &clusters, int repID[])
         }
     }
     printf("=clusters checking finished=\n");
-} 
+}
+
+void checkClustersNoRep(vector<vector<int> > &clusters)
+{
+    printf("=checking cluster similarity...=\n");
+    for(unsigned i=0; i<clusters.size(); i++)
+    {
+        printf("- now checking cluster %d -\n", i+1);
+        int rep = -1;
+        for(unsigned int r=0; r<clusters[i].size(); r++)
+        {
+            clip *R = database.clips+clusters[i][r];
+            clip *A;
+            unsigned j;
+            for(j=0; j<clusters[i].size(); j++)
+            {
+                A = database.clips+clusters[i][j];
+
+                if(!isSimilar(R,A))//check whether similar according to the specified limit and in the specified mode (ACC/ECC)
+                {
+                    break;
+                }
+            }
+            if(j == clusters[i].size())
+            {
+                rep = r;
+                break;
+            }
+        }
+        if(rep==-1)
+        {
+            char ss[256];
+            sprintf(ss, "ERROR: cluster %d is invalid no matter which clip is representative\n", i+1);
+            handleError(ss); 
+        }
+        else
+        {
+            printf("cluster %d is valid with representative being clip %d\n", i+1, clusters[i][rep]);
+        }
+    }
+    printf("=clusters checking finished=\n");
+}  
 
 int main(int argc, char **argv)
 {
@@ -87,7 +128,7 @@ int main(int argc, char **argv)
     -------------------------------*/
     if(argc < 7)
     {
-        printf("Usage: %s <input_gds_file> <ACC/ECC> <threshold> <clip_width> <clip_height> <overlay_gds_file> [representative_gds_file]\n", argv[0]);
+        printf("Usage: %s <input_gds_file> <ACC/ECC> <threshold> <clip_width> <clip_height> <overlay_gds_file>\n", argv[0]);
         return -1;
     }
     database.mode=ACC;
@@ -290,7 +331,9 @@ int main(int argc, char **argv)
 
     printClusters(clusterID); //to save time, comment out this print function
 
-    checkClusters(clusterID, repID);//check similarity for each cluster
+
+    checkClustersNoRep(clusterID);//check similarity for each cluster
+    //A cluster is valid as long as there is at least one clip in a cluster that can be the representative.
 
     if(ISVALID)
         printf("Solution is valid.\n");

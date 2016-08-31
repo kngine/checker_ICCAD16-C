@@ -52,16 +52,15 @@ Tested with gcc version 4.8.4, Ubuntu 4.8.4-2ubuntu1~14.04.3, Intel(R) Xeon(R) C
 To compile:
 simply type "make -B"
 
-Usage: ./parse <input_gds_file> <ACC/ECC> <threshold> <clip_width> <clip_height> <overlay_gds_file> [representative_gds_file]
-"representative_gds_file" is optional
-If "representative_gds_file" is not provide, the first clip encountered in each cluster will be used as the representative
+Usage: ./parse <input_gds_file> <ACC/ECC> <threshold> <clip_width> <clip_height> <overlay_gds_file>
+A cluster is valid as long as there is at least one clip in a cluster that can be the representative.
 
 Note: this program is general enough to support the case of abutting/overlapping markers/clips.
 
 [Examples for Commands]
 ./parse ../benchmark/testcase1.gds ECC 4 200 200 ../benchmark/overlay_testcase1e4.gds
 ./parse ../benchmark/testcase3.gds ACC 0.95 250 250 ../benchmark/overlay_testcase3ap95.gds
-./parse ../benchmark/testcase3.gds ACC 0.95 250 250 ../benchmark/overlay_testcase3ap95.gds rep.gds
+./parse ../benchmark/testcase3.gds ACC 0.95 250 250 ../benchmark/overlay_testcase3ap95.gds 
 
 [Sample Output for overlay_testcase1ap95.gds]
 parsing cluster file...
@@ -73,11 +72,16 @@ cluster 3: 2 10 12
 cluster 4: 14
 Total clip #: 16
 =checking cluster similarity...=
-- now checking cluster 1  with representative clip 13 -
-- now checking cluster 2  with representative clip 15 -
-- now checking cluster 3  with representative clip 12 -
-- now checking cluster 4  with representative clip 14 -
+- now checking cluster 1 -
+cluster 1 is valid with representative being clip 1
+- now checking cluster 2 -
+cluster 2 is valid with representative being clip 0
+- now checking cluster 3 -
+cluster 3 is valid with representative being clip 2
+- now checking cluster 4 -
+cluster 4 is valid with representative being clip 14
 =clusters checking finished=
 Solution is valid.
 ----------Number of cluster: 4------------
+
 
