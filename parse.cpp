@@ -183,6 +183,7 @@ int main(int argc, char **argv)
 
     layoutLib[1].centerYX_sort();
     database.initClips(layoutLib[1].polygons.size());
+    database.N = layoutLib[1].polygons.size();
 
     _extClip(layoutLib); //init data
 
